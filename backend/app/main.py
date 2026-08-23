@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from sqlalchemy import text
-
+from fastapi.middleware.cors import CORSMiddleware
 from backend.app.db.database import engine
 from backend.app.db.models import (
     Employee,
@@ -20,12 +20,26 @@ from backend.app.api.routes.history import (
     router as history_router,
 )
 
+from backend.app.api.routes.transactions import (
+    router as transactions_router,
+)
+
 
 
 app = FastAPI(
     title="AI Risk Investigator",
     description="AI-powered financial transaction risk investigation system",
     version="0.1.0",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
@@ -63,4 +77,8 @@ app.include_router(
 
 app.include_router(
     history_router
+)
+
+app.include_router(
+    transactions_router
 )
