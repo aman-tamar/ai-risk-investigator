@@ -2,6 +2,9 @@ from __future__ import annotations
 import json
 from groq import Groq
 
+from backend.app.db.database import SessionLocal
+from backend.app.db.models import Investigation
+
 from backend.app.core.config import settings
 from backend.app.investigation.evidence import (
     build_evidence_package,
@@ -66,6 +69,53 @@ using the exact structure specified in the system prompt.
 """
 
 
+def save_investigation(
+    transaction_id: str,
+    evidence: dict,
+    investigation: InvestigationResult,
+) -> None:
+
+    session = SessionLocal()
+
+    try:
+        record = Investigation(
+            transaction_id=transaction_id,
+
+            ml_score=evidence["risk_assessment"][
+                "ml_score"
+            ],
+
+            rule_score=evidence["risk_assessment"][
+                "rule_score"
+            ],
+
+            final_risk_score=evidence[
+                "risk_assessment"
+            ]["final_risk_score"],
+
+            risk_level=evidence[
+                "risk_assessment"
+            ]["risk_level"],
+
+            confidence=investigation.confidence,
+
+            ai_conclusion=investigation.conclusion,
+
+            full_report_json=investigation.model_dump(),
+        )
+
+        session.add(record)
+
+        session.commit()
+
+    except Exception:
+        session.rollback()
+        raise
+
+    finally:
+        session.close()
+
+
 def investigate_transaction(
     transaction_id: str,
 ) -> dict:
@@ -112,6 +162,19 @@ def investigate_transaction(
     except Exception as exc:
         raise RuntimeError(
             "Groq response failed schema validation."
+        ) from exc
+
+
+    try:
+        save_investigation(
+            transaction_id,
+            evidence,
+            investigation,
+        )
+
+    except Exception as exc:
+        raise RuntimeError(
+            "Failed to save investigation to database."
         ) from exc
 
 

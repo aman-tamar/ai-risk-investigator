@@ -16,6 +16,10 @@ from backend.app.api.routes.investigation import (
     router as investigation_router,
 )
 
+from backend.app.api.routes.history import (
+    router as history_router,
+)
+
 
 
 app = FastAPI(
@@ -55,4 +59,8 @@ def database_health_check():
 
 app.include_router(
     investigation_router
+)
+
+app.include_router(
+    history_router
 )
