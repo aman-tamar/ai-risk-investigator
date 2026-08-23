@@ -11,9 +11,11 @@ from backend.app.db.models import (
     Approval,
     Incident,
 )
-from backend.app.investigation.llm_investigator import (
-    investigate_transaction,
+
+from backend.app.api.routes.investigation import (
+    router as investigation_router,
 )
+
 
 
 app = FastAPI(
@@ -51,28 +53,6 @@ def database_health_check():
         }
 
 
-@app.get("/api/investigate/{transaction_id}")
-def investigate(
-    transaction_id: str,
-):
-    try:
-        result = investigate_transaction(
-            transaction_id
-        )
-
-        return {
-            "status": "success",
-            "data": result,
-        }
-
-    except ValueError as exc:
-        return {
-            "status": "error",
-            "message": str(exc),
-        }
-
-    except Exception as exc:
-        return {
-            "status": "error",
-            "message": str(exc),
-        }
+app.include_router(
+    investigation_router
+)
