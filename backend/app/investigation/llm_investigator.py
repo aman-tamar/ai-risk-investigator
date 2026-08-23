@@ -1,12 +1,13 @@
 from __future__ import annotations
-
 import json
-
 from groq import Groq
 
 from backend.app.core.config import settings
 from backend.app.investigation.evidence import (
     build_evidence_package,
+)
+from backend.app.schemas.investigation import (
+    InvestigationResult,
 )
 
 
@@ -104,21 +105,28 @@ def investigate_transaction(
         )
 
     try:
-        investigation = json.loads(content)
-    except json.JSONDecodeError as exc:
+        investigation = InvestigationResult.model_validate_json(
+            content
+        )
+
+    except Exception as exc:
         raise RuntimeError(
-            "Groq returned invalid JSON."
+            "Groq response failed schema validation."
         ) from exc
+
 
     return {
         "transaction_id": transaction_id,
+
         "risk_assessment": evidence[
             "risk_assessment"
         ],
+
         "risk_signals": evidence[
             "risk_signals"
         ],
-        "investigation": investigation,
+
+        "investigation": investigation.model_dump(),
     }
 
 
@@ -131,10 +139,4 @@ if __name__ == "__main__":
 
     print("\n--- AI INVESTIGATION ---")
 
-    print(
-        json.dumps(
-            result,
-            indent=2,
-            default=str,
-        )
-    )
+    print(result)
