@@ -2,26 +2,22 @@
 
 An AI-powered financial risk investigation platform designed to analyze potentially risky financial transactions using machine learning, rule-based detection, evidence aggregation, and LLM-powered investigation.
 
-The system helps transform raw transaction data into structured risk assessments by identifying suspicious signals, collecting related evidence, generating an AI investigation report, and presenting the results through a professional dashboard.
+The system transforms raw transaction data into structured risk assessments by identifying suspicious signals, collecting related evidence, generating AI investigation reports, and presenting results through a professional dashboard.
 
 ## What This Project Does
 
 ```mermaid
 flowchart LR
     A["Financial Transaction"] --> B["Risk Analysis"]
-
     B --> C["ML Risk Scoring"]
     B --> D["Rule-Based Detection"]
-
     C --> E["Combined Risk Assessment"]
     D --> E
-
     E --> F["Evidence Collection"]
     F --> G["AI Investigation"]
-    G --> H["Structured Investigation Report"]
+    G --> H["Investigation Report"]
     H --> I["React Dashboard"]
 ```
-
 
 ## Key Features
 
@@ -44,42 +40,45 @@ sequenceDiagram
     participant AI as Groq LLM
     participant DB as PostgreSQL
 
-    U->>API: Select Transaction
-    API->>R: Calculate Risk
-    R-->>API: Risk Assessment
-    API->>E: Collect Evidence
-    E-->>API: Evidence Package
-    API->>AI: Analyze Evidence
-    AI-->>API: Investigation Report
-    API->>DB: Save Investigation
-    API-->>U: Display Results
-
+    U->>API: Select transaction
+    API->>R: Calculate risk
+    R-->>API: Risk assessment
+    API->>E: Collect evidence
+    E-->>API: Evidence package
+    API->>AI: Analyze evidence
+    AI-->>API: Investigation report
+    API->>DB: Save investigation
+    API-->>U: Display results
+```
 
 ## System Architecture
 
 ```mermaid
 flowchart TB
-    FE[React Frontend<br/>Dashboard] --> API[FastAPI Backend]
+    FE["React Frontend"] --> API["FastAPI Backend"]
 
-    API --> TX[Transaction APIs]
-    API --> INV[Investigation Engine]
+    API --> TX["Transaction APIs"]
+    API --> INV["Investigation Engine"]
 
-    INV --> RISK[Risk Engine]
-    INV --> EVIDENCE[Evidence Builder]
-    INV --> LLM[Groq LLM Investigator]
+    INV --> RISK["Risk Engine"]
+    INV --> EVIDENCE["Evidence Builder"]
+    INV --> LLM["Groq LLM Investigator"]
 
-    RISK --> DB[(PostgreSQL)]
+    RISK --> DB[("PostgreSQL")]
     EVIDENCE --> DB
     INV --> DB
 
-    LLM --> REPORT[Structured Investigation Report]
+    LLM --> REPORT["Investigation Report"]
     REPORT --> DB
     REPORT --> FE
+```
+
+## Tech Stack
 
 ### Backend
 
 | Technology | Purpose |
-|------------|---------|
+|---|---|
 | Python | Core backend development |
 | FastAPI | REST API development |
 | PostgreSQL | Transaction and investigation data |
@@ -90,14 +89,13 @@ flowchart TB
 ### Frontend
 
 | Technology | Purpose |
-|------------|---------|
+|---|---|
 | React | User interface |
 | TypeScript | Type-safe frontend development |
 | Vite | Frontend tooling |
 | Tailwind CSS | UI styling |
 | Recharts | Data visualization |
 | Framer Motion | Subtle UI animations |
-
 
 ## Project Structure
 
@@ -130,27 +128,26 @@ ai-risk-investigator/
 
 ```mermaid
 flowchart TD
-    A[Transaction Selected] --> B[Risk Scoring]
+    A["Transaction Selected"] --> B["Risk Scoring"]
+    B --> C{"Risk Signals Found"}
 
-    B --> C{Risk Signals Found?}
+    C -->|Yes| D["Build Evidence Package"]
+    C -->|No| E["Low Risk Assessment"]
 
-    C -->|Yes| D[Build Evidence Package]
-    C -->|No| E[Low Risk Assessment]
+    D --> F["Groq AI Investigator"]
 
-    D --> F[Groq AI Investigator]
+    F --> G["Key Findings"]
+    F --> H["Evidence Assessment"]
+    F --> I["Contradictory Evidence"]
+    F --> J["Recommended Actions"]
 
-    F --> G[Key Findings]
-    F --> H[Evidence Assessment]
-    F --> I[Contradictory Evidence]
-    F --> J[Recommended Actions]
-
-    G --> K[Investigation Report]
+    G --> K["Investigation Report"]
     H --> K
     I --> K
     J --> K
 
-    K --> L[(PostgreSQL)]
-    L --> M[React Dashboard]
+    K --> L[("PostgreSQL")]
+    L --> M["React Dashboard"]
 ```
 
 ## API Overview
@@ -163,19 +160,19 @@ The backend provides APIs for:
 - Individual investigation report retrieval
 - Application and database health checks
 
-Example investigation flow:
+### Investigation Flow
 
 ```text
-GET Transaction
-      ↓
+Transaction
+    ↓
 Calculate Risk
-      ↓
+    ↓
 Collect Evidence
-      ↓
+    ↓
 Generate AI Investigation
-      ↓
+    ↓
 Store Investigation Report
-      ↓
+    ↓
 Display in Dashboard
 ```
 
@@ -189,6 +186,8 @@ cd ai-risk-investigator
 ```
 
 ### 2. Backend Setup
+
+Create a virtual environment:
 
 ```bash
 python -m venv .venv
@@ -206,7 +205,7 @@ Install dependencies:
 pip install -r backend/requirements.txt
 ```
 
-Configure your environment variables, including:
+Configure your environment variables:
 
 ```text
 DATABASE_URL=
@@ -234,28 +233,28 @@ The project is designed to evolve toward a more autonomous and intelligent inves
 
 ```mermaid
 flowchart LR
-    A[Current System] --> B[AI Agents]
-    B --> C[MCP Tools]
-    C --> D[External Data Sources]
+    A["Current System"] --> B["AI Agents"]
+    B --> C["MCP Tools"]
+    C --> D["External Data Sources"]
 
-    A --> E[Neo4j Knowledge Graph]
-    E --> F[Relationship Analysis]
+    A --> E["Neo4j Knowledge Graph"]
+    E --> F["Relationship Analysis"]
 
-    A --> G[Sentence Transformers]
-    G --> H[Semantic Evidence Retrieval]
+    A --> G["Sentence Transformers"]
+    G --> H["Semantic Evidence Retrieval"]
 
-    D --> I[Autonomous Investigation]
+    D --> I["Autonomous Investigation"]
     F --> I
     H --> I
 ```
 
 ### Planned Improvements
 
-- **AI Agents** — Multiple specialized agents for evidence gathering, analysis, verification, and investigation planning.
+- **AI Agents** — Specialized agents for evidence gathering, analysis, verification, and investigation planning.
 - **MCP** — Connect agents with external tools, databases, APIs, and investigation resources.
 - **Neo4j Knowledge Graph** — Model relationships between employees, vendors, accounts, transactions, invoices, and incidents.
 - **Sentence Transformers** — Enable semantic search, similarity analysis, and improved evidence retrieval.
-- **Autonomous Investigation** — Allow agents to perform multi-step investigations and decide which evidence should be analyzed next.
+- **Autonomous Investigation** — Allow agents to perform multi-step investigations and determine what evidence to analyze next.
 
 ## Project Goal
 
