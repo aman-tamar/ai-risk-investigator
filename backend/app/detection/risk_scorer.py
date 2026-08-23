@@ -121,6 +121,9 @@ def build_risk_scores() -> pd.DataFrame:
         "shared_account_risk",
         "historical_vendor_risk",
         "threshold_risk",
+        "invoice_vendor_mismatch",
+        "self_approval",
+        "historical_incident",
         "rule_score",
     ]
 
