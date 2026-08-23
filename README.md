@@ -8,17 +8,19 @@ The system helps transform raw transaction data into structured risk assessments
 
 ```mermaid
 flowchart LR
-    A[Financial Transaction] --> B[Risk Analysis]
-    B --> C[ML Risk Scoring]
-    B --> D[Rule-Based Detection]
+    A["Financial Transaction"] --> B["Risk Analysis"]
 
-    C --> E[Combined Risk Assessment]
+    B --> C["ML Risk Scoring"]
+    B --> D["Rule-Based Detection"]
+
+    C --> E["Combined Risk Assessment"]
     D --> E
 
-    E --> F[Evidence Collection]
-    F --> G[AI Investigation]
-    G --> H[Structured Investigation Report]
-    H --> I[React Dashboard]
+    E --> F["Evidence Collection"]
+    F --> G["AI Investigation"]
+    G --> H["Structured Investigation Report"]
+    H --> I["React Dashboard"]
+```
 
 
 ## Key Features
